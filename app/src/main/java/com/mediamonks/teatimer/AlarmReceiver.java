@@ -3,6 +3,7 @@ package com.mediamonks.teatimer;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -30,6 +31,8 @@ public class AlarmReceiver extends BroadcastReceiver {
                 context.getString(R.string.tea_done_message), true);
 
         Prefs.putBoolean(PrefKeys.ALARM_RUNNING, false);
+
+        new Handler().postDelayed(() -> NotificationUtil.cancelNotification(context, NotificationId.ID_TIMER_DONE), 5000);
     }
 
 }
