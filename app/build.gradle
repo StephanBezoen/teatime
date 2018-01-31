@@ -5,10 +5,9 @@ buildscript {
     }
 
     dependencies {
-        def libs = rootProject.ext.Libraries
+        def classpaths = rootProject.ext.ClassPaths
 
-        classpath libs.hugo
-        classpath libs.retrolambda
+        classpath classpaths.hugo
     }
 }
 
@@ -18,14 +17,12 @@ def libs = config.Libraries
 
 apply plugin: plugins.android_app
 apply plugin: plugins.hugo
-apply plugin: plugins.retrolambda
 
 android {
     def versions = config.Versions
     def appConfig = config.AppConfig
 
     compileSdkVersion versions.compileSdk
-    buildToolsVersion versions.buildTools
 
     defaultConfig {
         minSdkVersion versions.minSdk
@@ -36,6 +33,7 @@ android {
         versionName appConfig.versionName
 
         testInstrumentationRunner libs.test_runner
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -48,6 +46,10 @@ android {
         }
     }
 
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -55,7 +57,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // testing
     androidTestCompile(libs.test_espresso, {
@@ -64,46 +66,53 @@ dependencies {
     testCompile libs.test_junit
 
     // Android Support
-    compile libs.support_appCompat
-    compile libs.support_design
-    compile libs.support_constraintLayout
+    implementation libs.support_appCompat
+    implementation libs.support_design
+    implementation libs.support_constraintLayout
+    implementation libs.support_cardview
 
     // Rx
-    compile libs.rxAndroid
+    implementation libs.rxAndroid
 
     // Play Services
 
     // Butterknife
-    compile libs.butterknife
+    implementation libs.butterknife
     annotationProcessor libs.annotationProcessorButterknife
 
     // Pixplicity Prefs
-    compile libs.easyPrefs
+    implementation libs.easyPrefs
 
     // GSon
-    compile libs.gson
+    implementation libs.gson
 
     // Retrofit
-    compile libs.retrofit
-    compile libs.retrofit_gsonConverter
-    compile libs.retrofit_rxAdapter
+    implementation libs.retrofit
+    implementation libs.retrofit_gsonConverter
+    implementation libs.retrofit_rxAdapter
 
-    // Picasso
-    compile libs.picasso
+    implementation libs.timber
+
+    // Glide
+    implementation libs.glide
+    annotationProcessor libs.annotationProcessorGlide
 
     // Dagger
-    compile libs.dagger
+    implementation libs.dagger
     annotationProcessor libs.annotationProcessorDagger
 
     // OkHttp
-    compile libs.okHttp
-    compile libs.okHttp_loggingInterceptor
+    implementation libs.okHttp
+    implementation libs.okHttp_loggingInterceptor
 
     // AutoValue
-    provided libs.autoValue
+    compileOnly libs.autoValue
     annotationProcessor libs.autoValue
 
     // AutoValue Gson
-    provided libs.autoValue_gson
+    compileOnly libs.autoValue_gson
     annotationProcessor libs.autoValue_gson
+
+    // Stetho
+    implementation libs.stetho
 }

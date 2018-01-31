@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.mediamonks.teatimer.MainActivity"
+    tools:context="nl.acidcats.ui.TeaTimeActivity"
     android:gravity="center_horizontal"
     >
 
@@ -15,7 +15,7 @@
         android:layout_width="209dp"
         android:layout_height="205dp"
         android:paddingTop="50dp"
-        />
+        android:contentDescription="@null"/>
 
     <TextView
         android:id="@+id/tv_time"

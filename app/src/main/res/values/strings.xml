@@ -7,4 +7,10 @@
     <string name="tea_done_message">Enjoy your tea :)</string>
     <string name="timer_started_title">Timer started</string>
     <string name="timer_started_message">Your tea will be done @ %s</string>
+    <string name="timer_started">Timer started</string>
+    <string name="timer_stopped">Timer stopped</string>
+
+    <string name="notification_channel_id">teatimer_channel_id</string>
+    <string name="notification_channel_name">Tea Timer Channel</string>
+    <string name="notification_channel_description">Tea Timer</string>
 </resources>
