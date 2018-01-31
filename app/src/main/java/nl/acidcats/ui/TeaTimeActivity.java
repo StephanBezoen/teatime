@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import nl.acidcats.alarm.AlarmHelper;
 import nl.acidcats.teatimer.R;
 import timber.log.Timber;
@@ -28,8 +27,8 @@ public class TeaTimeActivity extends AppCompatActivity {
     @BindView(R.id.settings_button)
     ImageView _settingsButton;
 
-    private Runnable _updateRunnable = this::updateView;
-    private Handler _updateHandler = new Handler();
+    private final Runnable _updateRunnable = this::updateView;
+    private final Handler _updateHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

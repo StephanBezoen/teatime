@@ -15,7 +15,6 @@ import timber.log.Timber;
  */
 
 public class TeaTimeApplication extends Application{
-    private static final String TAG = TeaTimeApplication.class.getSimpleName();
 
     @Override
     public void onCreate() {
