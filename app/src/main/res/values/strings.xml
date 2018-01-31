@@ -11,6 +11,6 @@
     <string name="timer_stopped">Timer stopped</string>
 
     <string name="notification_channel_id">teatimer_channel_id</string>
-    <string name="notification_channel_name">Tea Timer Channel</string>
-    <string name="notification_channel_description">Tea Timer</string>
+    <string name="notification_channel_name">Tea Timer Notifications</string>
+    <string name="notification_channel_description">This handles the tea timer notifications</string>
 </resources>

@@ -1,10 +1,15 @@
 package nl.acidcats.ui;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -20,6 +25,8 @@ public class TeaTimeActivity extends AppCompatActivity {
     TextView _timeText;
     @BindView(R.id.btn_stop)
     Button _stopButton;
+    @BindView(R.id.settings_button)
+    ImageView _settingsButton;
 
     private Runnable _updateRunnable = this::updateView;
     private Handler _updateHandler = new Handler();
@@ -36,6 +43,23 @@ public class TeaTimeActivity extends AppCompatActivity {
 
             finish();
         }
+
+        _stopButton.setOnClickListener(v -> onStopButtonClick());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            _settingsButton.setVisibility(View.VISIBLE);
+            _settingsButton.setOnClickListener(v -> goNotificationSettings());
+        } else {
+            _settingsButton.setVisibility(View.GONE);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void goNotificationSettings() {
+        Intent intent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS);
+        intent.putExtra(Settings.EXTRA_CHANNEL_ID, getString(R.string.notification_channel_id));
+        intent.putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName());
+        startActivity(intent);
     }
 
     @Override
@@ -75,8 +99,7 @@ public class TeaTimeActivity extends AppCompatActivity {
         _stopButton.setVisibility(View.GONE);
     }
 
-    @OnClick(R.id.btn_stop)
-    void onStopButtonClick() {
+    private void onStopButtonClick() {
         AlarmHelper.stopAlarm(this);
 
         _updateHandler.removeCallbacks(_updateRunnable);
