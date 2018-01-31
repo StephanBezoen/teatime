@@ -8,7 +8,7 @@
         >
         <intent
             android:action="nl.acidcats.teatimer.ACTION_START_TIMER"
-            android:targetPackage="nl.acidcats.teatimer.debug"
+            android:targetPackage="${applicationId}"
             android:targetClass="nl.acidcats.teatimer.ui.TeaTimeActivity"
             />
     </shortcut>

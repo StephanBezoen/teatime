@@ -31,7 +31,7 @@ public class AlarmHelper {
     private static final String PREFKEY_ALARM_RUNNING = "prefkey_alarmRunning";
     private static final String PREFKEY_ALARM_END_TIME = "prefkey_alarmEndTime";
 
-    private static final int DEFAULT_TEA_TIME_SECONDS = 5;
+    private static final int DEFAULT_TEA_TIME_SECONDS = 5 * 60;
 
     public static void startAlarm(Context context, Class<?> actionClass) {
         Calendar calendar = Calendar.getInstance();
