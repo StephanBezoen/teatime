@@ -1,4 +1,4 @@
-package nl.acidcats;
+package nl.acidcats.teatimer;
 
 import android.app.Application;
 
@@ -7,7 +7,7 @@ import com.pixplicity.easyprefs.library.Prefs;
 
 import nl.acidcats.teatimer.BuildConfig;
 import nl.acidcats.teatimer.R;
-import nl.acidcats.util.NotificationUtil;
+import nl.acidcats.teatimer.util.NotificationUtil;
 import timber.log.Timber;
 
 /**

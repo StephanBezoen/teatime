@@ -1,4 +1,4 @@
-package nl.acidcats.ui;
+package nl.acidcats.teatimer.ui;
 
 import android.content.Intent;
 import android.os.Build;
@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import nl.acidcats.alarm.AlarmHelper;
+import nl.acidcats.teatimer.alarm.AlarmHelper;
 import nl.acidcats.teatimer.R;
 import timber.log.Timber;
 

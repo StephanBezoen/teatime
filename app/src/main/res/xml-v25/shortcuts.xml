@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android" >
+    <shortcut
+        android:shortcutId="start_timer"
+        android:icon="@drawable/tea_cup"
+        android:shortcutShortLabel="@string/app_shortcut_start_timer"
+        android:shortcutLongLabel="@string/app_shortcut_start_timer"
+        >
+        <intent
+            android:action="nl.acidcats.teatimer.ACTION_START_TIMER"
+            android:targetPackage="nl.acidcats.teatimer.debug"
+            android:targetClass="nl.acidcats.teatimer.ui.TeaTimeActivity"
+            />
+    </shortcut>
+</shortcuts>

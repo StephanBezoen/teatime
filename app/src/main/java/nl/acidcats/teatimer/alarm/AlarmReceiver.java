@@ -1,10 +1,10 @@
-package nl.acidcats.alarm;
+package nl.acidcats.teatimer.alarm;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import nl.acidcats.ui.TeaTimeActivity;
+import nl.acidcats.teatimer.ui.TeaTimeActivity;
 import timber.log.Timber;
 
 /**

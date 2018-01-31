@@ -1,4 +1,4 @@
-package nl.acidcats.util;
+package nl.acidcats.teatimer.util;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;

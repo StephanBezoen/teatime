@@ -1,4 +1,4 @@
-package nl.acidcats.alarm;
+package nl.acidcats.teatimer.alarm;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -17,7 +17,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import nl.acidcats.teatimer.R;
-import nl.acidcats.util.NotificationUtil;
+import nl.acidcats.teatimer.util.NotificationUtil;
 
 /**
  * Created on 31/01/2018.

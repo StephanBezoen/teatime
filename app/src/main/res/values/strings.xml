@@ -13,4 +13,6 @@
     <string name="notification_channel_id">teatimer_channel_id</string>
     <string name="notification_channel_name">Tea Timer Notifications</string>
     <string name="notification_channel_description">This handles the tea timer notifications</string>
+
+    <string name="app_shortcut_start_timer">Start Timer</string>
 </resources>
