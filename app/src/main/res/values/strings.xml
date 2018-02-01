@@ -10,9 +10,10 @@
     <string name="timer_started">Timer started</string>
     <string name="timer_stopped">Timer stopped</string>
 
-    <string name="notification_channel_id">teatimer_channel_id</string>
-    <string name="notification_channel_name">Tea Timer Notifications</string>
-    <string name="notification_channel_description">This handles the tea timer notifications</string>
+    <string name="notification_channel_name">Regular Notifications</string>
+    <string name="notification_channel_description">This handles the regular tea timer notifications</string>
+    <string name="alarm_channel_name">Alarms</string>
+    <string name="alarm_channel_description">This handles the tea timer alarms</string>
 
     <string name="app_shortcut_start_timer">Start Timer</string>
 </resources>

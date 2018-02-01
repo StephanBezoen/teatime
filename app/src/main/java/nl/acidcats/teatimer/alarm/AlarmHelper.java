@@ -61,7 +61,7 @@ public class AlarmHelper {
                 context,
                 NOTIFICATION_ID_TIMER_DONE,
                 context.getString(R.string.tea_done_title),
-                context.getString(R.string.tea_done_message), true, R.string.notification_channel_id, actionClass);
+                context.getString(R.string.tea_done_message), true, R.string.alarm_channel_id, actionClass);
 
         new Handler().postDelayed(() -> NotificationUtil.cancelNotification(context, NOTIFICATION_ID_TIMER_DONE), 5000);
 

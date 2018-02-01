@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.annotation.StringRes;
 import android.support.v4.app.NotificationCompat;
 
@@ -51,9 +52,10 @@ public class NotificationUtil {
         manager.cancel(id);
     }
 
-    public static void createNotificationChannel(Context context, @StringRes int channelIdId, @StringRes int nameId, @StringRes int descId) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
-
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static void createNotificationChannel(Context context,
+                                                 @StringRes int channelIdId, @StringRes int nameId, @StringRes int descId,
+                                                 int importance, boolean enableVibration, boolean enableLights) {
         NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
         if (manager == null) return;
 
@@ -61,11 +63,11 @@ public class NotificationUtil {
         String channelName = context.getString(nameId);
         String channelDescription = context.getString(descId);
 
-        NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
+        NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
         channel.setDescription(channelDescription);
-        channel.enableLights(true);
+        channel.enableLights(enableLights);
         channel.setLightColor(Color.WHITE);
-        channel.enableVibration(true);
+        channel.enableVibration(enableVibration);
 
         manager.createNotificationChannel(channel);
     }
