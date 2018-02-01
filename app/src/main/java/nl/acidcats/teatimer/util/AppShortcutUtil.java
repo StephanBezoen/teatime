@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.acidcats.teatimer.R;
-import nl.acidcats.teatimer.ui.TeaTimeActivity;
+import nl.acidcats.teatimer.ui.SplashActivity;
 import timber.log.Timber;
 
 /**
@@ -38,7 +38,7 @@ public class AppShortcutUtil {
                     .setShortLabel(context.getString(R.string.app_shortcut_start_timer, timeItem))
                     .setLongLabel(context.getString(R.string.app_shortcut_start_timer, timeItem))
                     .setIcon(Icon.createWithResource(context, R.mipmap.ic_launcher))
-                    .setIntent(new Intent(context, TeaTimeActivity.class).setAction(Intent.ACTION_VIEW).putExtra(KEY_TIME, timeInSec))
+                    .setIntent(new Intent(context, SplashActivity.class).setAction(Intent.ACTION_VIEW).putExtra(KEY_TIME, timeInSec))
                     .build();
 
             shortcuts.add(shortcutInfo);

@@ -13,13 +13,20 @@
         tools:replace="android:allowBackup"
         android:allowBackup="false"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.TeaTimeActivity">
+        <activity
+            android:name=".ui.SplashActivity"
+            android:screenOrientation="portrait"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.TeaTimeActivity"
+            android:screenOrientation="portrait"
+            />
 
         <receiver
             android:name=".alarm.AlarmReceiver"/>

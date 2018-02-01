@@ -17,12 +17,9 @@ import butterknife.ButterKnife;
 import nl.acidcats.teatimer.R;
 import nl.acidcats.teatimer.alarm.AlarmHelper;
 import nl.acidcats.teatimer.util.AppShortcutUtil;
-import nl.acidcats.teatimer.util.BundleUtil;
 import timber.log.Timber;
 
 public class TeaTimeActivity extends AppCompatActivity {
-
-    private static final int DEFAULT_TEA_TIME_MINS = 5;
 
     @BindView(R.id.tv_time)
     TextView _timeText;
@@ -41,12 +38,6 @@ public class TeaTimeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        if (!AlarmHelper.isAlarmRunning()) {
-            startAlarm();
-
-            finish();
-        }
-
         _stopButton.setOnClickListener(v -> onStopButtonClick());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -55,19 +46,6 @@ public class TeaTimeActivity extends AppCompatActivity {
         } else {
             _settingsButton.setVisibility(View.GONE);
         }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            AppShortcutUtil.setupShortcuts(this);
-        }
-    }
-
-    private void startAlarm() {
-        int timerMins = DEFAULT_TEA_TIME_MINS;
-        if (getIntent() != null) {
-            timerMins = BundleUtil.getBundleValue(getIntent().getExtras(), AppShortcutUtil.KEY_TIME, DEFAULT_TEA_TIME_MINS);
-        }
-
-        AlarmHelper.startAlarm(this, timerMins, TeaTimeActivity.class);
     }
 
     @Override
