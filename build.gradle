@@ -42,13 +42,12 @@ ext {
     ]
 
     Versions = [
-            buildTools  : '26.0.2',
             minSdk      : 19,
-            targetSdk   : 26,
-            compileSdk  : 26,
+            targetSdk   : 27,
+            compileSdk  : 27,
 
             // Support libraries
-            supportLibs : '26.1.0',
+            supportLibs : '27.1.1',
 
             // Play Services
             playServices: '11.4.0',

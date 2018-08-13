@@ -18,6 +18,8 @@ def libs = config.Libraries
 apply plugin: plugins.android_app
 apply plugin: plugins.hugo
 
+apply from: "$rootDir/config/config.gradle", to: config
+
 android {
     def versions = config.Versions
     def appConfig = config.AppConfig
@@ -34,6 +36,15 @@ android {
 
         testInstrumentationRunner libs.test_runner
         vectorDrawables.useSupportLibrary = true
+    }
+
+    signingConfigs {
+        release_keystore {
+            storeFile file(config.keystore_file)
+            storePassword config.keystore_password
+            keyAlias config.keystore_key
+            keyPassword config.key_password
+        }
     }
 
     buildTypes {
