@@ -37,8 +37,7 @@ class TeaTimeActivity : AppCompatActivity() {
     }
 
     private fun goNotificationSettings() {
-        val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
-        intent.putExtra(Settings.EXTRA_CHANNEL_ID, getString(R.string.notification_channel_id))
+        val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
         intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
         startActivity(intent)
     }

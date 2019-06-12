@@ -29,7 +29,7 @@ ext {
     AppConfig = [
             id         : 'nl.acidcats.teatimer',
             versionCode: 1,
-            versionName: '1.0',
+            versionName: '1.1',
             debugSuffix: 'debug'
     ]
 

@@ -23,10 +23,10 @@ class TeaTimeApplication : Application() {
 
         NotificationUtil.createNotificationChannel(this,
             R.string.notification_channel_id, R.string.notification_channel_name, R.string.notification_channel_description,
-            NotificationManager.IMPORTANCE_DEFAULT, enableVibration = false, enableLights = false)
+            isImportant = false, enableVibration = false, enableLights = false)
 
         NotificationUtil.createNotificationChannel(this,
             R.string.alarm_channel_id, R.string.alarm_channel_name, R.string.alarm_channel_description,
-            NotificationManager.IMPORTANCE_HIGH, enableVibration = true, enableLights = true)
+            isImportant = true, enableVibration = true, enableLights = true)
     }
 }
