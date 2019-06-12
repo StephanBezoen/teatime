@@ -3,12 +3,6 @@ buildscript {
     repositories {
         mavenCentral()
     }
-
-    dependencies {
-        def classpaths = rootProject.ext.ClassPaths
-
-        classpath classpaths.hugo
-    }
 }
 
 def config = rootProject.ext
@@ -16,7 +10,10 @@ def plugins = config.Plugins
 def libs = config.Libraries
 
 apply plugin: plugins.android_app
-apply plugin: plugins.hugo
+apply plugin: plugins.kotlin
+apply plugin: plugins.kotlin_kapt
+apply plugin: plugins.kotlin_ext
+apply plugin: plugins.junit5
 
 apply from: "$rootDir/config/config.gradle", to: config
 
@@ -34,7 +31,10 @@ android {
         versionCode appConfig.versionCode
         versionName appConfig.versionName
 
-        testInstrumentationRunner libs.test_runner
+        testInstrumentationRunner libs.test_runner_android
+        // use runnerBuilder from mannodermaus
+        testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
+
         vectorDrawables.useSupportLibrary = true
     }
 
@@ -57,73 +57,54 @@ android {
         }
     }
 
-    packagingOptions {
-        exclude 'META-INF/rxjava.properties'
-    }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    lintOptions {
+        htmlReport true
+        abortOnError false
+        warningsAsErrors true
+    }
+    // Always show the result of every unit test, even if it passes.
+    testOptions.unitTests.all {
+        testLogging {
+            events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+        }
+    }
+
+    packagingOptions {
+        exclude "META-INF/LICENSE*"
+        exclude "META-INF/atomicfu.kotlin_module"
+    }
+}
+
+androidExtensions {
+    experimental = true
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    implementation libs.kotlin
+    implementation libs.kotlin_ktx
+
     // testing
-    androidTestCompile(libs.test_espresso, {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    testCompile libs.test_junit
+    androidTestImplementation libs.test_espresso
+
+    testImplementation libs.test_junit_jupiter
+    testImplementation libs.test_junit_params
+    testRuntimeOnly libs.test_junit_engine
+    androidTestImplementation libs.test_runner
 
     // Android Support
-    implementation libs.support_appCompat
-    implementation libs.support_design
-    implementation libs.support_constraintLayout
-    implementation libs.support_cardview
-
-    // Rx
-    implementation libs.rxAndroid
-
-    // Play Services
-
-    // Butterknife
-    implementation libs.butterknife
-    annotationProcessor libs.annotationProcessorButterknife
+    implementation libs.androidx_appCompat
+    implementation libs.androidx_annotations
+    implementation libs.androidx_constraintLayout
 
     // Pixplicity Prefs
     implementation libs.easyPrefs
 
-    // GSon
-    implementation libs.gson
-
-    // Retrofit
-    implementation libs.retrofit
-    implementation libs.retrofit_gsonConverter
-    implementation libs.retrofit_rxAdapter
-
     implementation libs.timber
-
-    // Glide
-    implementation libs.glide
-    annotationProcessor libs.annotationProcessorGlide
-
-    // Dagger
-    implementation libs.dagger
-    annotationProcessor libs.annotationProcessorDagger
-
-    // OkHttp
-    implementation libs.okHttp
-    implementation libs.okHttp_loggingInterceptor
-
-    // AutoValue
-    compileOnly libs.autoValue
-    annotationProcessor libs.autoValue
-
-    // AutoValue Gson
-    compileOnly libs.autoValue_gson
-    annotationProcessor libs.autoValue_gson
-
-    // Stetho
-    implementation libs.stetho
 }
