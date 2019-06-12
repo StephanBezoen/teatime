@@ -6,7 +6,6 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Handler
 import android.widget.Toast
 import androidx.annotation.StringRes
 import com.pixplicity.easyprefs.library.Prefs
@@ -62,8 +61,6 @@ object AlarmHelper {
             NOTIFICATION_ID_TIMER_DONE,
             context.getString(R.string.tea_done_title),
             context.getString(R.string.tea_done_message), true, R.string.alarm_channel_id, actionClass)
-
-        Handler().postDelayed({ NotificationUtil.cancelNotification(context, NOTIFICATION_ID_TIMER_DONE) }, 5000)
 
         showToast(context, R.string.tea_done_title, Toast.LENGTH_LONG)
     }

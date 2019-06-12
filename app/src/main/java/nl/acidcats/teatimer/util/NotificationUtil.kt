@@ -1,5 +1,6 @@
 package nl.acidcats.teatimer.util
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -34,7 +35,12 @@ object NotificationUtil {
 
         if (isImportant) {
             builder.setDefaults(NotificationCompat.DEFAULT_ALL).priority = NotificationCompat.PRIORITY_MAX
-            builder.setLights(0xFFFFFFFF.toInt(), 500, 500)
+            builder.setCategory(Notification.CATEGORY_ALARM)
+            builder.setTimeoutAfter(5000)
+        } else {
+            builder.setOngoing(true)
+            builder.setUsesChronometer(true)
+            builder.setCategory(Notification.CATEGORY_SERVICE)
         }
 
         manager.notify(id, builder.build())
@@ -61,7 +67,10 @@ object NotificationUtil {
         channel.description = channelDescription
         channel.lightColor = Color.WHITE
         channel.enableLights(enableLights)
-        channel.enableVibration(enableVibration)
+
+        if (enableVibration) {
+            channel.vibrationPattern = longArrayOf(500, 500, 500, 500)
+        }
 
         if (isImportant) {
             val attributes = AudioAttributes.Builder()
