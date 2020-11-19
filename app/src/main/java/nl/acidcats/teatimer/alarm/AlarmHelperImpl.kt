@@ -8,9 +8,10 @@ import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import androidx.annotation.StringRes
-import com.pixplicity.easyprefs.library.Prefs
 import nl.acidcats.teatimer.R
 import nl.acidcats.teatimer.util.NotificationUtil
+import nl.acidcats.teatimer.util.SoundUtil
+import nl.acidcats.teatimer.util.StorageHelper
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -18,21 +19,31 @@ import java.util.*
  * Created on 31/01/2018.
  */
 
-object AlarmHelper {
-
-    private const val NOTIFICATION_ID_TIMER_STARTED = 1
-    private const val NOTIFICATION_ID_TIMER_DONE = 2
-
-    private const val PREFKEY_ALARM_RUNNING = "prefkey_alarmRunning"
-    private const val PREFKEY_ALARM_END_TIME = "prefkey_alarmEndTime"
+interface AlarmHelper {
 
     val isAlarmRunning: Boolean
-        get() = Prefs.contains(PREFKEY_ALARM_RUNNING) && Prefs.getBoolean(PREFKEY_ALARM_RUNNING, false)
 
     val timeLeft: Long
-        get() = Prefs.getLong(PREFKEY_ALARM_END_TIME, 0L) - Calendar.getInstance().timeInMillis
 
-    fun startAlarm(context: Context, timerMins: Int, actionClass: Class<*>) {
+    fun startAlarm(timerMins: Int, actionClass: Class<*>)
+
+    fun handleAlarm(actionClass: Class<*>)
+
+    fun stopAlarm()
+}
+
+class AlarmHelperImpl(
+        private val context: Context,
+        private val storageHelper: StorageHelper,
+) : AlarmHelper {
+
+    override val isAlarmRunning: Boolean
+        get() = storageHelper.isAlarmRunning
+
+    override val timeLeft: Long
+        get() = storageHelper.alarmEndTime - Calendar.getInstance().timeInMillis
+
+    override fun startAlarm(timerMins: Int, actionClass: Class<*>) {
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.MINUTE, timerMins)
         val endTime = calendar.timeInMillis
@@ -42,30 +53,34 @@ object AlarmHelper {
 
         val dateFormat = SimpleDateFormat.getTimeInstance()
         val timeDone = dateFormat.format(Date(endTime))
-        NotificationUtil.showNotification(context, NOTIFICATION_ID_TIMER_STARTED,
-            context.getString(R.string.timer_started_title),
-            context.getString(R.string.timer_started_message, timeDone),
-            R.string.notification_channel_id,
-            actionClass)
+        NotificationUtil.showNotification(
+                context = context,
+                id = NOTIFICATION_ID_TIMER_STARTED,
+                title = context.getString(R.string.timer_started_title),
+                message = context.getString(R.string.timer_started_message, timeDone),
+                channelIdId = R.string.notification_channel_id,
+                cls = actionClass)
 
         showToast(context, R.string.timer_started)
     }
 
-    fun handleAlarm(context: Context, actionClass: Class<*>) {
+    override fun handleAlarm(actionClass: Class<*>) {
         clearAlarmPreferences()
 
         NotificationUtil.cancelNotification(context, NOTIFICATION_ID_TIMER_STARTED)
 
         NotificationUtil.showNotification(
-            context,
-            NOTIFICATION_ID_TIMER_DONE,
-            context.getString(R.string.tea_done_title),
-            context.getString(R.string.tea_done_message), true, R.string.alarm_channel_id, actionClass)
+                context,
+                NOTIFICATION_ID_TIMER_DONE,
+                context.getString(R.string.tea_done_title),
+                context.getString(R.string.tea_done_message), true, R.string.alarm_channel_id, actionClass)
 
         showToast(context, R.string.tea_done_title, Toast.LENGTH_LONG)
+
+        SoundUtil.playSound(context)
     }
 
-    fun stopAlarm(context: Context) {
+    override fun stopAlarm() {
         if (!clearAlarm(context)) return
 
         clearAlarmPreferences()
@@ -80,8 +95,8 @@ object AlarmHelper {
     }
 
     private fun updateAlarmPreferences(endTime: Long, timerStarted: Boolean) {
-        Prefs.putLong(PREFKEY_ALARM_END_TIME, endTime)
-        Prefs.putBoolean(PREFKEY_ALARM_RUNNING, timerStarted)
+        storageHelper.alarmEndTime = endTime
+        storageHelper.isAlarmRunning = timerStarted
     }
 
     private fun setAlarm(context: Context, endTime: Long) {
@@ -105,5 +120,10 @@ object AlarmHelper {
 
     private fun showToast(context: Context, @StringRes messageId: Int, duration: Int = Toast.LENGTH_SHORT) {
         Toast.makeText(context, messageId, duration).show()
+    }
+
+    companion object {
+        private const val NOTIFICATION_ID_TIMER_STARTED = 1
+        private const val NOTIFICATION_ID_TIMER_DONE = 2
     }
 }

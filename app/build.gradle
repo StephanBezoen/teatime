@@ -1,7 +1,11 @@
-buildscript {
 
+buildscript {
     repositories {
         mavenCentral()
+    }
+
+    dependencies {
+        classpath rootProject.ext.ClassPaths.kotlin
     }
 }
 
@@ -13,7 +17,6 @@ apply plugin: plugins.android_app
 apply plugin: plugins.kotlin
 apply plugin: plugins.kotlin_kapt
 apply plugin: plugins.kotlin_ext
-apply plugin: plugins.junit5
 
 apply from: "$rootDir/config/config.gradle", to: config
 
@@ -22,6 +25,7 @@ android {
     def appConfig = config.AppConfig
 
     compileSdkVersion versions.compileSdk
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
         minSdkVersion versions.minSdk
@@ -30,10 +34,6 @@ android {
         applicationId appConfig.id
         versionCode appConfig.versionCode
         versionName appConfig.versionName
-
-        testInstrumentationRunner libs.test_runner_android
-        // use runnerBuilder from mannodermaus
-        testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
 
         vectorDrawables.useSupportLibrary = true
     }
@@ -61,6 +61,7 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
     }
 
     lintOptions {
@@ -68,17 +69,16 @@ android {
         abortOnError false
         warningsAsErrors true
     }
-    // Always show the result of every unit test, even if it passes.
-    testOptions.unitTests.all {
-        testLogging {
-            events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
-        }
-    }
 
     packagingOptions {
         exclude "META-INF/LICENSE*"
         exclude "META-INF/atomicfu.kotlin_module"
     }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
 }
 
 androidExtensions {
@@ -90,22 +90,17 @@ dependencies {
 
     implementation libs.kotlin
     implementation libs.kotlin_ktx
-
-    // testing
-    androidTestImplementation libs.test_espresso
-
-    testImplementation libs.test_junit_jupiter
-    testImplementation libs.test_junit_params
-    testRuntimeOnly libs.test_junit_engine
-    androidTestImplementation libs.test_runner
+    implementation libs.kotlin_coroutines_core
 
     // Android Support
     implementation libs.androidx_appCompat
     implementation libs.androidx_annotations
     implementation libs.androidx_constraintLayout
 
-    // Pixplicity Prefs
-    implementation libs.easyPrefs
-
     implementation libs.timber
+
+    implementation libs.koin_core
+    implementation libs.koin_android
+
+    coreLibraryDesugaring libs.desugaring
 }

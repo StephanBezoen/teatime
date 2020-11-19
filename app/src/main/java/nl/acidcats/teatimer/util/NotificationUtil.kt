@@ -25,13 +25,25 @@ object NotificationUtil {
     }
 
     fun showNotification(context: Context, id: Int, title: String, message: String, isImportant: Boolean, @StringRes channelIdId: Int, cls: Class<*>) {
-        val manager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        val notification = createNotification(context, channelIdId, title, message, cls, isImportant)
 
+        val manager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        manager.notify(id, notification)
+    }
+
+    fun createNotification(
+            context: Context,
+            channelIdId: Int,
+            title: String,
+            message: String,
+            cls: Class<*>,
+            isImportant: Boolean
+    ): Notification {
         val builder = NotificationCompat.Builder(context, context.getString(channelIdId))
-            .setSmallIcon(R.drawable.ic_notification_teacup)
-            .setContentTitle(title)
-            .setContentText(message)
-            .setContentIntent(PendingIntent.getActivity(context, 0, Intent(context, cls), PendingIntent.FLAG_UPDATE_CURRENT))
+                .setSmallIcon(R.drawable.ic_notification_teacup)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setContentIntent(PendingIntent.getActivity(context, 0, Intent(context, cls), PendingIntent.FLAG_UPDATE_CURRENT))
 
         if (isImportant) {
             builder.setDefaults(NotificationCompat.DEFAULT_ALL).priority = NotificationCompat.PRIORITY_MAX
@@ -43,7 +55,7 @@ object NotificationUtil {
             builder.setCategory(Notification.CATEGORY_SERVICE)
         }
 
-        manager.notify(id, builder.build())
+        return builder.build()
     }
 
     fun cancelNotification(context: Context, id: Int) {
@@ -72,6 +84,7 @@ object NotificationUtil {
             channel.vibrationPattern = longArrayOf(500, 500, 500, 500)
         }
 
+/*
         if (isImportant) {
             val attributes = AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_ALARM)
@@ -81,6 +94,7 @@ object NotificationUtil {
 
             channel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), attributes)
         }
+*/
 
         manager.createNotificationChannel(channel)
     }

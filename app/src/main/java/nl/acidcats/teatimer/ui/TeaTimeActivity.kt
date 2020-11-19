@@ -11,19 +11,32 @@ import kotlinx.android.synthetic.main.activity_main.*
 import nl.acidcats.teatimer.R
 import nl.acidcats.teatimer.alarm.AlarmHelper
 import nl.acidcats.teatimer.util.AppShortcutUtil
+import org.koin.android.ext.android.inject
 
 class TeaTimeActivity : AppCompatActivity() {
 
     private val _updateRunnable = Runnable { this.updateView() }
     private val _updateHandler = Handler()
+    private val alarmHelper: AlarmHelper by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
 
-        stopButton.setOnClickListener { onStopButtonClick() }
-        settingsButton.setOnClickListener { goNotificationSettings() }
+        stopButton.setOnClickListener {
+            alarmHelper.stopAlarm()
+
+            _updateHandler.removeCallbacks(_updateRunnable)
+
+            finish()
+        }
+
+        settingsButton.setOnClickListener {
+            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+            intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+            startActivity(intent)
+        }
     }
 
     override fun onNewIntent(newIntent: Intent) {
@@ -34,12 +47,6 @@ class TeaTimeActivity : AppCompatActivity() {
         if (intent != null) {
             Timber.d { "onNewIntent: ${intent.getIntExtra(AppShortcutUtil.KEY_TIME, -1)}" }
         }
-    }
-
-    private fun goNotificationSettings() {
-        val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
-        intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
-        startActivity(intent)
     }
 
     override fun onResume() {
@@ -57,13 +64,13 @@ class TeaTimeActivity : AppCompatActivity() {
     private fun updateView() {
         Timber.d { "updateView: " }
 
-        if (!AlarmHelper.isAlarmRunning) {
+        if (!alarmHelper.isAlarmRunning) {
             showStopped()
 
             return
         }
 
-        var secondsLeft = AlarmHelper.timeLeft / 1000L
+        var secondsLeft = alarmHelper.timeLeft / 1000L
         val minutesLeft = secondsLeft / 60L
         secondsLeft %= 60L
         timeText.text = getString(R.string.time_left, minutesLeft, secondsLeft)
@@ -75,13 +82,5 @@ class TeaTimeActivity : AppCompatActivity() {
     private fun showStopped() {
         timeText.text = getString(R.string.alarm_stopped)
         stopButton.visibility = View.GONE
-    }
-
-    private fun onStopButtonClick() {
-        AlarmHelper.stopAlarm(this)
-
-        _updateHandler.removeCallbacks(_updateRunnable)
-
-        finish()
     }
 }
