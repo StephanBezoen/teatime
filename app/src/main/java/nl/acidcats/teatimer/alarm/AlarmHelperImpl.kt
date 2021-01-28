@@ -10,10 +10,13 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import nl.acidcats.teatimer.R
 import nl.acidcats.teatimer.util.NotificationUtil
+import nl.acidcats.teatimer.util.ScreenUtil
 import nl.acidcats.teatimer.util.SoundUtil
 import nl.acidcats.teatimer.util.StorageHelper
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.time.ExperimentalTime
+import kotlin.time.seconds
 
 /**
  * Created on 31/01/2018.
@@ -32,6 +35,7 @@ interface AlarmHelper {
     fun stopAlarm()
 }
 
+@ExperimentalTime
 class AlarmHelperImpl(
         private val context: Context,
         private val storageHelper: StorageHelper,
@@ -68,6 +72,8 @@ class AlarmHelperImpl(
         clearAlarmPreferences()
 
         NotificationUtil.cancelNotification(context, NOTIFICATION_ID_TIMER_STARTED)
+
+        ScreenUtil.wakeScreen(context, 2.seconds)
 
         NotificationUtil.showNotification(
                 context,

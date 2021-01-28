@@ -8,12 +8,13 @@ import nl.acidcats.teatimer.util.NotificationUtil
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
-import org.koin.core.module.Module
+import kotlin.time.ExperimentalTime
 
 /**
  * Application class for the TeaTimer application
  */
 
+@ExperimentalTime
 @Suppress("unused")
 class TeaTimeApplication : Application() {
 
@@ -33,10 +34,7 @@ class TeaTimeApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@TeaTimeApplication)
-            modules(
-                    listOf<Module>()
-                            + helperModule
-            )
+            koin.loadModules(listOf(helperModule))
         }
     }
 }

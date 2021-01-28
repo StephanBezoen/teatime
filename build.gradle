@@ -6,7 +6,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.1'
+        classpath 'com.android.tools.build:gradle:4.2.0-beta03'
     }
 }
 
@@ -42,15 +42,15 @@ ext {
             compileSdk       : 30,
 
             // Kotlin
-            kotlin           : '1.4.10',
+            kotlin           : '1.4.21',
             kotlin_coroutines: "1.3.8-1.4.0-rc",
 
             // Support libraries
-            androidx         : '1.2.0-alpha01',
+            androidx         : '1.2.0-beta01',
             arch             : '2.0.0',
             lifecycle        : '2.1.0-alpha03',
 
-            koin             : '2.0.1'
+            koin             : '2.1.6',
     ]
 
     ClassPaths = [
@@ -59,13 +59,13 @@ ext {
 
     Libraries = [
             // AndroidX
-            androidx_appCompat       : "androidx.appcompat:appcompat:1.3.0-alpha02",
+            androidx_core            : "androidx.core:core-ktx:1.5.0-beta01",
+            androidx_appCompat       : "androidx.appcompat:appcompat:1.3.0-beta01",
             androidx_annotations     : "androidx.annotation:annotation:${Versions.androidx}",
             androidx_constraintLayout: 'androidx.constraintlayout:constraintlayout:2.0.4',
 
             // kotlin
             kotlin                   : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}",
-            kotlin_ktx               : "androidx.core:core-ktx:1.5.0-alpha05",
             kotlin_coroutines_core   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.kotlin_coroutines}",
 
             desugaring               : 'com.android.tools:desugar_jdk_libs:1.1.1',
@@ -73,8 +73,8 @@ ext {
             // Logging
             timber                   : "com.github.ajalt:timberkt:1.5.1",
 
-            koin_core                   : "org.koin:koin-core:${Versions.koin}",
-            koin_android                : "org.koin:koin-android:${Versions.koin}"
+            koin_core                : "org.koin:koin-core:${Versions.koin}",
+            koin_android             : "org.koin:koin-android:${Versions.koin}",
 
     ]
 }
