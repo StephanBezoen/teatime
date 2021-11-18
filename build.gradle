@@ -2,17 +2,17 @@
 
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.0-beta03'
+        classpath 'com.android.tools.build:gradle:7.1.0-beta03'
     }
 }
 
 allprojects {
     repositories {
-        jcenter()
+        mavenCentral()
         google()
     }
 }
@@ -32,49 +32,39 @@ ext {
     Plugins = [
             android_app: 'com.android.application',
             kotlin     : 'kotlin-android',
-            kotlin_ext : 'kotlin-android-extensions',
             kotlin_kapt: 'kotlin-kapt'
     ]
 
     Versions = [
             minSdk           : 26,
-            targetSdk        : 30,
-            compileSdk       : 30,
+            targetSdk        : 31,
+            compileSdk       : 31,
 
-            // Kotlin
-            kotlin           : '1.4.21',
-            kotlin_coroutines: "1.3.8-1.4.0-rc",
-
-            // Support libraries
-            androidx         : '1.2.0-beta01',
-            arch             : '2.0.0',
-            lifecycle        : '2.1.0-alpha03',
+            kotlin           : '1.6.0',
 
             koin             : '2.1.6',
     ]
 
     ClassPaths = [
-            kotlin: "org.jetbrains.kotlin:kotlin-gradle-plugin:$Versions.kotlin"
+            kotlin: "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     ]
 
     Libraries = [
             // AndroidX
-            androidx_core            : "androidx.core:core-ktx:1.5.0-beta01",
-            androidx_appCompat       : "androidx.appcompat:appcompat:1.3.0-beta01",
-            androidx_annotations     : "androidx.annotation:annotation:${Versions.androidx}",
-            androidx_constraintLayout: 'androidx.constraintlayout:constraintlayout:2.0.4',
+            androidx_core            : "androidx.core:core-ktx:1.7.0",
+            androidx_appCompat       : "androidx.appcompat:appcompat:1.4.0",
+            androidx_annotations     : "androidx.annotation:annotation:1.3.0",
+            androidx_constraintLayout: 'androidx.constraintlayout:constraintlayout:2.1.2',
 
             // kotlin
             kotlin                   : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}",
-            kotlin_coroutines_core   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.kotlin_coroutines}",
-
-            desugaring               : 'com.android.tools:desugar_jdk_libs:1.1.1',
+            kotlin_coroutines_core   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2",
 
             // Logging
             timber                   : "com.github.ajalt:timberkt:1.5.1",
 
-            koin_core                : "org.koin:koin-core:${Versions.koin}",
-            koin_android             : "org.koin:koin-android:${Versions.koin}",
+            koin_core                : "io.insert-koin:koin-core:${Versions.koin}",
+            koin_android             : "io.insert-koin:koin-android:${Versions.koin}",
 
     ]
 }

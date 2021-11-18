@@ -8,8 +8,6 @@ import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.graphics.Color
-import android.media.AudioAttributes
-import android.media.RingtoneManager
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import nl.acidcats.teatimer.R
@@ -31,19 +29,21 @@ object NotificationUtil {
         manager.notify(id, notification)
     }
 
-    fun createNotification(
-            context: Context,
-            channelIdId: Int,
-            title: String,
-            message: String,
-            cls: Class<*>,
-            isImportant: Boolean
+    private fun createNotification(
+        context: Context,
+        channelIdId: Int,
+        title: String,
+        message: String,
+        cls: Class<*>,
+        isImportant: Boolean
     ): Notification {
+        val flags = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+
         val builder = NotificationCompat.Builder(context, context.getString(channelIdId))
-                .setSmallIcon(R.drawable.ic_notification_teacup)
-                .setContentTitle(title)
-                .setContentText(message)
-                .setContentIntent(PendingIntent.getActivity(context, 0, Intent(context, cls), PendingIntent.FLAG_UPDATE_CURRENT))
+            .setSmallIcon(R.drawable.ic_notification_teacup)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setContentIntent(PendingIntent.getActivity(context, 0, Intent(context, cls), flags))
 
         if (isImportant) {
             builder.setDefaults(NotificationCompat.DEFAULT_ALL).priority = NotificationCompat.PRIORITY_MAX
@@ -64,9 +64,11 @@ object NotificationUtil {
         manager.cancel(id)
     }
 
-    fun createNotificationChannel(context: Context,
-                                  @StringRes channelIdId: Int, @StringRes nameId: Int, @StringRes descId: Int,
-                                  isImportant: Boolean, enableVibration: Boolean, enableLights: Boolean) {
+    fun createNotificationChannel(
+        context: Context,
+        @StringRes channelIdId: Int, @StringRes nameId: Int, @StringRes descId: Int,
+        isImportant: Boolean, enableVibration: Boolean, enableLights: Boolean
+    ) {
         val manager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         val channelId = context.getString(channelIdId)

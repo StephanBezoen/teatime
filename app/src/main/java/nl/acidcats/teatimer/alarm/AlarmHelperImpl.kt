@@ -15,8 +15,8 @@ import nl.acidcats.teatimer.util.SoundUtil
 import nl.acidcats.teatimer.util.StorageHelper
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
-import kotlin.time.seconds
 
 /**
  * Created on 31/01/2018.
@@ -121,7 +121,7 @@ class AlarmHelperImpl(
 
     private fun getAlarmReceiverIntent(context: Context): PendingIntent {
         val intent = Intent(context, AlarmReceiver::class.java)
-        return PendingIntent.getBroadcast(context, 1, intent, 0)
+        return PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_IMMUTABLE)
     }
 
     private fun showToast(context: Context, @StringRes messageId: Int, duration: Int = Toast.LENGTH_SHORT) {
