@@ -6,7 +6,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.0-beta03'
+        classpath 'com.android.tools.build:gradle:7.1.0-rc01'
     }
 }
 
@@ -40,9 +40,9 @@ ext {
             targetSdk        : 31,
             compileSdk       : 31,
 
-            kotlin           : '1.6.0',
+            kotlin           : '1.5.31',
 
-            koin             : '2.1.6',
+            koin             : '3.1.5',
     ]
 
     ClassPaths = [
@@ -52,9 +52,9 @@ ext {
     Libraries = [
             // AndroidX
             androidx_core            : "androidx.core:core-ktx:1.7.0",
-            androidx_appCompat       : "androidx.appcompat:appcompat:1.4.0",
+            androidx_appCompat       : "androidx.appcompat:appcompat:1.4.1",
             androidx_annotations     : "androidx.annotation:annotation:1.3.0",
-            androidx_constraintLayout: 'androidx.constraintlayout:constraintlayout:2.1.2',
+            androidx_constraintLayout: 'androidx.constraintlayout:constraintlayout:2.1.3',
 
             // kotlin
             kotlin                   : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}",

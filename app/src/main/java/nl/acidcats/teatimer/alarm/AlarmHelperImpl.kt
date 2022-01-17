@@ -15,12 +15,8 @@ import nl.acidcats.teatimer.util.SoundUtil
 import nl.acidcats.teatimer.util.StorageHelper
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
-
-/**
- * Created on 31/01/2018.
- */
 
 interface AlarmHelper {
 
@@ -37,8 +33,8 @@ interface AlarmHelper {
 
 @ExperimentalTime
 class AlarmHelperImpl(
-        private val context: Context,
-        private val storageHelper: StorageHelper,
+    private val context: Context,
+    private val storageHelper: StorageHelper,
 ) : AlarmHelper {
 
     override val isAlarmRunning: Boolean
@@ -58,12 +54,13 @@ class AlarmHelperImpl(
         val dateFormat = SimpleDateFormat.getTimeInstance()
         val timeDone = dateFormat.format(Date(endTime))
         NotificationUtil.showNotification(
-                context = context,
-                id = NOTIFICATION_ID_TIMER_STARTED,
-                title = context.getString(R.string.timer_started_title),
-                message = context.getString(R.string.timer_started_message, timeDone),
-                channelIdId = R.string.notification_channel_id,
-                cls = actionClass)
+            context = context,
+            id = NOTIFICATION_ID_TIMER_STARTED,
+            title = context.getString(R.string.timer_started_title),
+            message = context.getString(R.string.timer_started_message, timeDone),
+            channelIdId = R.string.notification_channel_id,
+            cls = actionClass
+        )
 
         showToast(context, R.string.timer_started)
     }
@@ -73,13 +70,14 @@ class AlarmHelperImpl(
 
         NotificationUtil.cancelNotification(context, NOTIFICATION_ID_TIMER_STARTED)
 
-        ScreenUtil.wakeScreen(context, 2.seconds)
+        ScreenUtil.wakeScreen(context, Duration.seconds(2))
 
         NotificationUtil.showNotification(
-                context,
-                NOTIFICATION_ID_TIMER_DONE,
-                context.getString(R.string.tea_done_title),
-                context.getString(R.string.tea_done_message), true, R.string.alarm_channel_id, actionClass)
+            context,
+            NOTIFICATION_ID_TIMER_DONE,
+            context.getString(R.string.tea_done_title),
+            context.getString(R.string.tea_done_message), true, R.string.alarm_channel_id, actionClass
+        )
 
         showToast(context, R.string.tea_done_title, Toast.LENGTH_LONG)
 
