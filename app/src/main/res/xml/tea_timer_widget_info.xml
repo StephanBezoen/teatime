@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:configure="nl.acidcats.teatimer.widget.TeaTimerWidgetConfigureActivity"
     android:description="@string/app_widget_description"
-    android:initialKeyguardLayout="@layout/tea_timer_widget"
     android:initialLayout="@layout/tea_timer_widget"
     android:minWidth="40dp"
     android:minHeight="40dp"

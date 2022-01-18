@@ -9,10 +9,12 @@ import android.view.View
 import android.widget.EditText
 import nl.acidcats.teatimer.R
 import nl.acidcats.teatimer.databinding.TeaTimerWidgetConfigureBinding
+import kotlin.time.ExperimentalTime
 
 /**
  * The configuration screen for the [TeaTimerWidget] AppWidget.
  */
+@ExperimentalTime
 class TeaTimerWidgetConfigureActivity : Activity() {
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
     private lateinit var appWidgetText: EditText

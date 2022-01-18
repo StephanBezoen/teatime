@@ -1,22 +1,22 @@
-<RelativeLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/Widget.Teatime.AppWidget.Container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:layout_width="50dp"
+    tools:layout_height="100dp"
     android:theme="@style/AppTheme.AppWidgetContainer"
+    android:background="@color/transparent"
     >
 
-    <TextView
-        android:id="@+id/appwidget_text"
-        style="@style/Widget.Teatime.AppWidget.InnerView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="8dp"
-        android:contentDescription="@string/appwidget_text"
-        android:text="@string/appwidget_text"
-        android:textSize="24sp"
-        android:textStyle="bold|italic"
+    <ImageButton
+        android:id="@+id/teacupButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/tea_cup"
+        android:scaleType="centerInside"
+        android:contentDescription="@null"
+        android:background="@color/transparent"
         />
-</RelativeLayout>
+</FrameLayout>

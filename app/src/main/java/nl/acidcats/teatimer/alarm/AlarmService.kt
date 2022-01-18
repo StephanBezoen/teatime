@@ -1,6 +1,7 @@
 package nl.acidcats.teatimer.alarm
 
 import android.app.Service
+import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
@@ -13,6 +14,7 @@ import nl.acidcats.teatimer.util.NotificationUtil
 import nl.acidcats.teatimer.util.ScreenUtil
 import nl.acidcats.teatimer.util.SoundUtil
 import nl.acidcats.teatimer.util.StorageHelper
+import nl.acidcats.teatimer.widget.updateAppWidget
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.text.SimpleDateFormat
@@ -34,14 +36,17 @@ class AlarmService : Service(), CoroutineScope, KoinComponent {
 
     companion object {
         private const val KEY_DURATION = "duration"
+        private const val KEY_WIDGET_ID = "widgetId"
         private const val ACTION_STOP = "stop"
 
-        fun startAlarmService(context: Context, durationInMinutes: Int) {
-            Intent(context, AlarmService::class.java).also { intent ->
-                intent.putExtra(KEY_DURATION, durationInMinutes)
-
-                context.startForegroundService(intent)
+        fun getAlarmServiceIntent(context: Context, durationInMinutes: Int, appWidgetId: Int? = null) =
+            Intent(context, AlarmService::class.java).apply {
+                putExtra(KEY_DURATION, durationInMinutes)
+                appWidgetId?.let { id -> putExtra(KEY_WIDGET_ID, id) }
             }
+
+        fun startAlarmService(context: Context, durationInMinutes: Int) {
+            context.startForegroundService(getAlarmServiceIntent(context, durationInMinutes))
         }
 
         fun stopAlarmService(context: Context) {
@@ -63,6 +68,8 @@ class AlarmService : Service(), CoroutineScope, KoinComponent {
         }
 
         val minutes = intent?.getIntExtra(KEY_DURATION, 5) ?: return START_REDELIVER_INTENT
+
+        updateWidget(intent.getIntExtra(KEY_WIDGET_ID, 0))
 
         onTimerStarted(minutes)
 
@@ -93,6 +100,12 @@ class AlarmService : Service(), CoroutineScope, KoinComponent {
             isImportant = false
         )
         startForeground(1, notification)
+    }
+
+    private fun updateWidget(widgetId: Int) {
+        if (widgetId == 0) return
+
+        updateAppWidget(this, AppWidgetManager.getInstance(this), widgetId)
     }
 
     private fun onTimerDone() {
