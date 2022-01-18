@@ -9,11 +9,13 @@ import com.github.ajalt.timberkt.Timber
 import nl.acidcats.teatimer.R
 import nl.acidcats.teatimer.ui.SplashActivity
 import java.util.*
+import kotlin.time.ExperimentalTime
 
 /**
  * Created on 01/02/2018.
  */
 
+@ExperimentalTime
 object AppShortcutUtil {
     const val KEY_TIME = "key_time"
 

@@ -18,10 +18,6 @@ import nl.acidcats.teatimer.R
 
 object NotificationUtil {
 
-    fun showNotification(context: Context, id: Int, title: String, message: String, @StringRes channelIdId: Int, cls: Class<*>) {
-        showNotification(context, id, title, message, false, channelIdId, cls)
-    }
-
     fun showNotification(context: Context, id: Int, title: String, message: String, isImportant: Boolean, @StringRes channelIdId: Int, cls: Class<*>) {
         val notification = createNotification(context, channelIdId, title, message, cls, isImportant)
 
@@ -29,7 +25,7 @@ object NotificationUtil {
         manager.notify(id, notification)
     }
 
-    private fun createNotification(
+    fun createNotification(
         context: Context,
         channelIdId: Int,
         title: String,
@@ -66,8 +62,12 @@ object NotificationUtil {
 
     fun createNotificationChannel(
         context: Context,
-        @StringRes channelIdId: Int, @StringRes nameId: Int, @StringRes descId: Int,
-        isImportant: Boolean, enableVibration: Boolean, enableLights: Boolean
+        @StringRes channelIdId: Int,
+        @StringRes nameId: Int,
+        @StringRes descId: Int,
+        isImportant: Boolean,
+        enableVibration: Boolean,
+        enableLights: Boolean
     ) {
         val manager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
@@ -85,18 +85,6 @@ object NotificationUtil {
         if (enableVibration) {
             channel.vibrationPattern = longArrayOf(500, 500, 500, 500)
         }
-
-/*
-        if (isImportant) {
-            val attributes = AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_ALARM)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
-                .build()
-
-            channel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), attributes)
-        }
-*/
 
         manager.createNotificationChannel(channel)
     }

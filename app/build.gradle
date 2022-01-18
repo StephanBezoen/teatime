@@ -88,6 +88,8 @@ dependencies {
     implementation libs.kotlin
     implementation libs.kotlin_coroutines_core
 
+    implementation libs.lifecycle_runtime
+
     // Android Support
     implementation libs.androidx_core
     implementation libs.androidx_appCompat

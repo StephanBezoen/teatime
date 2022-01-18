@@ -9,16 +9,20 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.github.ajalt.timberkt.Timber
 import nl.acidcats.teatimer.R
-import nl.acidcats.teatimer.alarm.AlarmHelper
+import nl.acidcats.teatimer.alarm.AlarmService
 import nl.acidcats.teatimer.databinding.ActivityMainBinding
 import nl.acidcats.teatimer.util.AppShortcutUtil
+import nl.acidcats.teatimer.util.StorageHelper
 import org.koin.android.ext.android.inject
+import java.util.*
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 class TeaTimeActivity : AppCompatActivity() {
 
     private val _updateRunnable = ::updateView
     private val _updateHandler = Handler(Looper.getMainLooper())
-    private val alarmHelper: AlarmHelper by inject()
+    private val storageHelper: StorageHelper by inject()
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +32,7 @@ class TeaTimeActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.stopButton.setOnClickListener {
-            alarmHelper.stopAlarm()
+            AlarmService.stopAlarmService(this)
 
             _updateHandler.removeCallbacks(_updateRunnable)
 
@@ -65,15 +69,13 @@ class TeaTimeActivity : AppCompatActivity() {
     }
 
     private fun updateView() {
-        Timber.d { "updateView: " }
-
-        if (!alarmHelper.isAlarmRunning) {
+        if (!storageHelper.isAlarmRunning) {
             showStopped()
 
             return
         }
 
-        var secondsLeft = alarmHelper.timeLeft / 1000L
+        var secondsLeft = (storageHelper.alarmEndTime - Calendar.getInstance().timeInMillis) / 1000L
         val minutesLeft = secondsLeft / 60L
         secondsLeft %= 60L
         binding.timeText.text = getString(R.string.time_left, minutesLeft, secondsLeft)

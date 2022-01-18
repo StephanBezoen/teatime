@@ -1,48 +1,41 @@
 package nl.acidcats.teatimer.ui
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import nl.acidcats.teatimer.alarm.AlarmHelper
+import nl.acidcats.teatimer.alarm.AlarmService
 import nl.acidcats.teatimer.util.AppShortcutUtil
 import nl.acidcats.teatimer.util.BundleUtil
+import nl.acidcats.teatimer.util.StorageHelper
 import org.koin.android.ext.android.inject
-
+import kotlin.time.ExperimentalTime
 
 /**
  * Created on 23/11/2017.
  */
-
+@SuppressLint("CustomSplashScreen")
+@ExperimentalTime
 class SplashActivity : AppCompatActivity() {
 
-    private val alarmHelper: AlarmHelper by inject()
+    private val storageHelper: StorageHelper by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         AppShortcutUtil.setupShortcuts(this)
 
-        if (alarmHelper.isAlarmRunning) {
+        if (storageHelper.isAlarmRunning) {
             startActivity(Intent(this, TeaTimeActivity::class.java))
         } else {
-            startAlarm()
+            val minutes = intent?.extras?.let { extras ->
+                BundleUtil.getBundleValue(extras, AppShortcutUtil.KEY_TIME, DEFAULT_TEA_TIME_MINS)
+            } ?: DEFAULT_TEA_TIME_MINS
 
-            val goToHomeIntent = Intent(Intent.ACTION_MAIN)
-            goToHomeIntent.addCategory(Intent.CATEGORY_HOME)
-            goToHomeIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(goToHomeIntent)
-
+            AlarmService.startAlarmService(this, durationInMinutes = minutes)
         }
 
         finish()
-    }
-
-    private fun startAlarm() {
-        val timerMins = intent?.extras?.let { extras ->
-            BundleUtil.getBundleValue(extras, AppShortcutUtil.KEY_TIME, DEFAULT_TEA_TIME_MINS)
-        } ?: DEFAULT_TEA_TIME_MINS
-
-        alarmHelper.startAlarm(timerMins, TeaTimeActivity::class.java)
     }
 
     companion object {
