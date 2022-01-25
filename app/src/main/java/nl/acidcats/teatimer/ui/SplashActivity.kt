@@ -25,7 +25,7 @@ class SplashActivity : AppCompatActivity() {
 
         AppShortcutUtil.setupShortcuts(this)
 
-        if (storageHelper.isAlarmRunning) {
+        if (storageHelper.alarmState.isAlarmRunning) {
             startActivity(Intent(this, TeaTimeActivity::class.java))
         } else {
             val minutes = intent?.extras?.let { extras ->

@@ -32,7 +32,7 @@ class TeaTimeActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.stopButton.setOnClickListener {
-            AlarmService.stopAlarmService(this)
+            AlarmService.cancelAlarmService(this)
 
             _updateHandler.removeCallbacks(_updateRunnable)
 
@@ -69,13 +69,13 @@ class TeaTimeActivity : AppCompatActivity() {
     }
 
     private fun updateView() {
-        if (!storageHelper.isAlarmRunning) {
+        if (!storageHelper.alarmState.isAlarmRunning) {
             showStopped()
 
             return
         }
 
-        var secondsLeft = (storageHelper.alarmEndTime - Calendar.getInstance().timeInMillis) / 1000L
+        var secondsLeft = (storageHelper.alarmState.alarmEndTime - Calendar.getInstance().timeInMillis) / 1000L
         val minutesLeft = secondsLeft / 60L
         secondsLeft %= 60L
         binding.timeText.text = getString(R.string.time_left, minutesLeft, secondsLeft)

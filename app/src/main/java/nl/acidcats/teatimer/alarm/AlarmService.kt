@@ -7,95 +7,97 @@ import android.content.Intent
 import android.os.IBinder
 import android.widget.Toast
 import androidx.annotation.StringRes
-import kotlinx.coroutines.*
 import nl.acidcats.teatimer.R
 import nl.acidcats.teatimer.ui.TeaTimeActivity
-import nl.acidcats.teatimer.util.NotificationUtil
-import nl.acidcats.teatimer.util.ScreenUtil
-import nl.acidcats.teatimer.util.SoundUtil
-import nl.acidcats.teatimer.util.StorageHelper
+import nl.acidcats.teatimer.util.*
 import nl.acidcats.teatimer.widget.updateAppWidget
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.coroutines.CoroutineContext
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
-class AlarmService : Service(), CoroutineScope, KoinComponent {
-    private val coroutineJob: Job = Job()
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.IO + coroutineJob
+class AlarmService : Service(), KoinComponent {
 
     private val storageHelper: StorageHelper by inject()
-    private var timerJob: Job? = null
+    private val alarmHelper: AlarmHelper by inject()
 
     override fun onBind(intent: Intent?): IBinder? = null
 
     companion object {
-        private const val KEY_DURATION = "duration"
-        private const val KEY_WIDGET_ID = "widgetId"
-        private const val ACTION_STOP = "stop"
+        private val DurationKey = Key("duration")
+        private val WidgetIdKey = Key("widgetId")
+
+        private val StartAction = Action("start")
+        private val CancelAction = Action("cancel")
+        private val DoneAction = Action("done")
 
         fun getAlarmServiceIntent(context: Context, durationInMinutes: Int, appWidgetId: Int? = null) =
             Intent(context, AlarmService::class.java).apply {
-                putExtra(KEY_DURATION, durationInMinutes)
-                appWidgetId?.let { id -> putExtra(KEY_WIDGET_ID, id) }
+                action = StartAction.value
+                putExtra(DurationKey.value, durationInMinutes)
+                appWidgetId?.let { id -> putExtra(WidgetIdKey.value, id) }
             }
 
         fun startAlarmService(context: Context, durationInMinutes: Int) {
             context.startForegroundService(getAlarmServiceIntent(context, durationInMinutes))
         }
 
-        fun stopAlarmService(context: Context) {
-            Intent(context, AlarmService::class.java).also { intent ->
-                intent.action = ACTION_STOP
+        fun cancelAlarmService(context: Context) {
+            startService(context, CancelAction)
+        }
 
-                context.startService(intent)
-            }
+        fun onAlarmDone(context: Context) {
+            startService(context, DoneAction)
+        }
+
+        private fun startService(context: Context, action: Action) {
+            context.startService(Intent(context, AlarmService::class.java).apply { this.action = action.value })
         }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        timerJob?.cancel()
+        return when (intent?.action) {
+            StartAction.value -> {
+                startTimer(
+                    minutes = intent.getIntExtra(DurationKey.value, 5),
+                    widgetId = intent.getIntExtra(WidgetIdKey.value, 0)
+                )
 
-        if (intent?.action?.equals(ACTION_STOP) == true) {
-            cancelTimer()
-
-            return START_NOT_STICKY
-        }
-
-        val minutes = intent?.getIntExtra(KEY_DURATION, 5) ?: return START_REDELIVER_INTENT
-
-        updateWidget(intent.getIntExtra(KEY_WIDGET_ID, 0))
-
-        onTimerStarted(minutes)
-
-        timerJob = launch {
-            delay(minutes * 60_000L)
-
-            withContext(Dispatchers.Main) {
-                onTimerDone()
+                START_STICKY
             }
-        }
+            CancelAction.value -> {
+                cancelTimer()
 
-        return START_STICKY
+                START_NOT_STICKY
+            }
+            DoneAction.value -> {
+                onTimerDone()
+
+                START_NOT_STICKY
+            }
+            else -> START_NOT_STICKY
+        }
     }
 
-    private fun onTimerStarted(minutes: Int) {
-        val calendar = Calendar.getInstance().apply { add(Calendar.MINUTE, minutes) }
+    private fun startTimer(minutes: Int, widgetId: Int) {
+        val endTimeMs = Calendar.getInstance().apply { add(Calendar.MINUTE, minutes) }.timeInMillis
 
-        updateAlarmPreferences(calendar.timeInMillis, true)
+        storageHelper.alarmState = AlarmState(true, endTimeMs)
+
+        alarmHelper.startAlarm(endTimeMs)
 
         showToast(R.string.timer_started)
+
+        updateWidget(widgetId)
 
         val notification = NotificationUtil.createNotification(
             context = this,
             channelIdId = R.string.notification_channel_id,
             title = getString(R.string.timer_started_title),
-            message = getString(R.string.timer_started_message, SimpleDateFormat.getTimeInstance().format(calendar.time)),
+            message = getString(R.string.timer_started_message, SimpleDateFormat.getTimeInstance().format(Date(endTimeMs))),
             cls = TeaTimeActivity::class.java,
             isImportant = false
         )
@@ -109,7 +111,7 @@ class AlarmService : Service(), CoroutineScope, KoinComponent {
     }
 
     private fun onTimerDone() {
-        updateAlarmPreferences(0, false)
+        storageHelper.alarmState = StoppedAlarm
 
         ScreenUtil.wakeScreen(this, Duration.seconds(2))
 
@@ -131,9 +133,9 @@ class AlarmService : Service(), CoroutineScope, KoinComponent {
     }
 
     private fun cancelTimer() {
-        timerJob?.cancel()
+        alarmHelper.stopAlarm()
 
-        updateAlarmPreferences(0, false)
+        storageHelper.alarmState = StoppedAlarm
 
         showToast(R.string.timer_stopped)
 
@@ -144,12 +146,9 @@ class AlarmService : Service(), CoroutineScope, KoinComponent {
         Toast.makeText(this, messageId, duration).show()
     }
 
-    private fun updateAlarmPreferences(endTime: Long, timerStarted: Boolean) {
-        storageHelper.alarmEndTime = endTime
-        storageHelper.isAlarmRunning = timerStarted
-    }
+    @JvmInline
+    value class Action(val value: String)
 
-    override fun onDestroy() {
-        coroutineJob.cancel()
-    }
+    @JvmInline
+    value class Key(val value: String)
 }
