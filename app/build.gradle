@@ -60,17 +60,15 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
-    lintOptions {
-        htmlReport true
-        abortOnError false
-        warningsAsErrors true
-    }
-
     packagingOptions {
-        exclude "META-INF/LICENSE*"
-        exclude "META-INF/atomicfu.kotlin_module"
+        jniLibs {
+            excludes += ['META-INF/LICENSE*']
+        }
+        resources {
+            excludes += ['META-INF/LICENSE*', 'META-INF/atomicfu.kotlin_module']
+        }
     }
+
 
     kotlinOptions {
         jvmTarget = '1.8'
@@ -79,6 +77,11 @@ android {
     buildFeatures {
         viewBinding true
     }
+    lint {
+        abortOnError false
+        htmlReport true
+        warningsAsErrors true
+    }
 
 }
 
@@ -86,7 +89,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation libs.kotlin
-    implementation libs.kotlin_coroutines_core
 
     implementation libs.lifecycle_runtime
 

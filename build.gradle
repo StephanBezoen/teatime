@@ -6,8 +6,8 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.0-rc01'
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10-RC'
+        classpath 'com.android.tools.build:gradle:7.1.2'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10'
     }
 }
 
@@ -41,7 +41,7 @@ ext {
             targetSdk : 31,
             compileSdk: 31,
 
-            kotlin    : '1.5.31',
+            kotlin    : '1.6.10',
 
             koin      : '3.1.5',
     ]
@@ -59,7 +59,7 @@ ext {
 
             // kotlin
             kotlin                   : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}",
-            kotlin_coroutines_core   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2",
+            kotlin_coroutines_core   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0",
 
             lifecycle_runtime        : "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0",
 
