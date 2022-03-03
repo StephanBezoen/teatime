@@ -142,6 +142,8 @@ class AlarmService : Service(), KoinComponent {
     private fun cancelTimer() {
         alarmHelper.stopAlarm()
 
+        NotificationUtil.cancelNotification(this, 1)
+
         storageHelper.alarmState = StoppedAlarm
 
         showToast(R.string.timer_stopped)
