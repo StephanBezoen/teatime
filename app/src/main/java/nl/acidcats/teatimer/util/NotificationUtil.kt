@@ -25,7 +25,7 @@ object NotificationUtil {
         manager.notify(id, notification)
     }
 
-    fun createNotification(
+    private fun createNotification(
         context: Context,
         channelIdId: Int,
         title: String,
