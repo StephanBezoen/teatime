@@ -7,11 +7,9 @@ import android.os.Looper
 import android.provider.Settings
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.github.ajalt.timberkt.Timber
 import nl.acidcats.teatimer.R
 import nl.acidcats.teatimer.alarm.AlarmService
 import nl.acidcats.teatimer.databinding.ActivityMainBinding
-import nl.acidcats.teatimer.util.AppShortcutUtil
 import nl.acidcats.teatimer.util.StorageHelper
 import org.koin.android.ext.android.inject
 import java.util.*
@@ -41,16 +39,6 @@ class TeaTimeActivity : AppCompatActivity() {
             val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
             intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
             startActivity(intent)
-        }
-    }
-
-    override fun onNewIntent(newIntent: Intent) {
-        super.onNewIntent(newIntent)
-
-        Timber.d { "onNewIntent: $intent" }
-
-        if (intent != null) {
-            Timber.d { "onNewIntent: ${intent.getIntExtra(AppShortcutUtil.KEY_TIME, -1)}" }
         }
     }
 
