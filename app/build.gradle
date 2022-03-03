@@ -82,6 +82,7 @@ android {
         htmlReport true
         warningsAsErrors true
     }
+    namespace 'nl.acidcats.teatimer'
 
 }
 
