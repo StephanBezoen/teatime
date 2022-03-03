@@ -13,7 +13,6 @@ import org.koin.core.context.startKoin
  * Application class for the TeaTimer application
  */
 
-@Suppress("unused")
 class TeaTimeApplication : Application() {
 
     override fun onCreate() {
