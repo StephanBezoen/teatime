@@ -7,7 +7,6 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import kotlin.time.ExperimentalTime
 
 interface AlarmHelper {
     fun startAlarm(endTimeMs: Long)
@@ -15,7 +14,6 @@ interface AlarmHelper {
     fun stopAlarm()
 }
 
-@ExperimentalTime
 class AlarmHelperImpl(
     private val context: Context,
 ) : AlarmHelper {

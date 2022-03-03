@@ -9,13 +9,11 @@ import nl.acidcats.teatimer.util.AppShortcutUtil
 import nl.acidcats.teatimer.util.BundleUtil
 import nl.acidcats.teatimer.util.StorageHelper
 import org.koin.android.ext.android.inject
-import kotlin.time.ExperimentalTime
 
 /**
  * Created on 23/11/2017.
  */
 @SuppressLint("CustomSplashScreen")
-@ExperimentalTime
 class SplashActivity : AppCompatActivity() {
 
     private val storageHelper: StorageHelper by inject()

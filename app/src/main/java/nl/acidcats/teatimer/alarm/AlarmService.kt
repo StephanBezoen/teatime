@@ -16,9 +16,7 @@ import org.koin.core.component.inject
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.ExperimentalTime
 
-@ExperimentalTime
 class AlarmService : Service(), KoinComponent {
 
     private val storageHelper: StorageHelper by inject()

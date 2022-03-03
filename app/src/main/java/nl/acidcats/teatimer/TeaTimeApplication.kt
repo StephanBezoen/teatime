@@ -8,13 +8,11 @@ import nl.acidcats.teatimer.util.NotificationUtil
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
-import kotlin.time.ExperimentalTime
 
 /**
  * Application class for the TeaTimer application
  */
 
-@ExperimentalTime
 @Suppress("unused")
 class TeaTimeApplication : Application() {
 
@@ -23,13 +21,17 @@ class TeaTimeApplication : Application() {
 
         Timber.plant(DebugTree())
 
-        NotificationUtil.createNotificationChannel(this,
-                R.string.notification_channel_id, R.string.notification_channel_name, R.string.notification_channel_description,
-                isImportant = false, enableVibration = false, enableLights = false)
+        NotificationUtil.createNotificationChannel(
+            this,
+            R.string.notification_channel_id, R.string.notification_channel_name, R.string.notification_channel_description,
+            isImportant = false, enableVibration = false, enableLights = false
+        )
 
-        NotificationUtil.createNotificationChannel(this,
-                R.string.alarm_channel_id, R.string.alarm_channel_name, R.string.alarm_channel_description,
-                isImportant = true, enableVibration = true, enableLights = true)
+        NotificationUtil.createNotificationChannel(
+            this,
+            R.string.alarm_channel_id, R.string.alarm_channel_name, R.string.alarm_channel_description,
+            isImportant = true, enableVibration = true, enableLights = true
+        )
 
         startKoin {
             androidLogger()

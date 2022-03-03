@@ -15,9 +15,7 @@ import nl.acidcats.teatimer.util.AppShortcutUtil
 import nl.acidcats.teatimer.util.StorageHelper
 import org.koin.android.ext.android.inject
 import java.util.*
-import kotlin.time.ExperimentalTime
 
-@ExperimentalTime
 class TeaTimeActivity : AppCompatActivity() {
 
     private val _updateRunnable = ::updateView
