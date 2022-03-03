@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.IBinder
 import android.widget.Toast
 import androidx.annotation.StringRes
+import com.github.ajalt.timberkt.Timber
 import nl.acidcats.teatimer.R
 import nl.acidcats.teatimer.ui.TeaTimeActivity
 import nl.acidcats.teatimer.util.*
@@ -15,7 +16,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
@@ -42,7 +43,7 @@ class AlarmService : Service(), KoinComponent {
             }
 
         fun startAlarmService(context: Context, durationInMinutes: Int) {
-            context.startForegroundService(getAlarmServiceIntent(context, durationInMinutes))
+            context.startService(getAlarmServiceIntent(context, durationInMinutes))
         }
 
         fun cancelAlarmService(context: Context) {
@@ -59,6 +60,8 @@ class AlarmService : Service(), KoinComponent {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Timber.d { "Intent action = ${intent?.action}" }
+
         return when (intent?.action) {
             StartAction.value -> {
                 startTimer(
@@ -83,6 +86,8 @@ class AlarmService : Service(), KoinComponent {
     }
 
     private fun startTimer(minutes: Int, widgetId: Int) {
+        Timber.d { "Starting timer for $minutes minutes" }
+
         val endTimeMs = Calendar.getInstance().apply { add(Calendar.MINUTE, minutes) }.timeInMillis
 
         storageHelper.alarmState = AlarmState(true, endTimeMs)
@@ -93,15 +98,15 @@ class AlarmService : Service(), KoinComponent {
 
         updateWidget(widgetId)
 
-        val notification = NotificationUtil.createNotification(
+        NotificationUtil.showNotification(
             context = this,
+            id = 1,
             channelIdId = R.string.notification_channel_id,
             title = getString(R.string.timer_started_title),
             message = getString(R.string.timer_started_message, SimpleDateFormat.getTimeInstance().format(Date(endTimeMs))),
             cls = TeaTimeActivity::class.java,
             isImportant = false
         )
-        startForeground(1, notification)
     }
 
     private fun updateWidget(widgetId: Int) {
@@ -113,7 +118,9 @@ class AlarmService : Service(), KoinComponent {
     private fun onTimerDone() {
         storageHelper.alarmState = StoppedAlarm
 
-        ScreenUtil.wakeScreen(this, Duration.seconds(2))
+        ScreenUtil.wakeScreen(this, 2.seconds)
+
+        NotificationUtil.cancelNotification(this, 1)
 
         NotificationUtil.showNotification(
             context = this,
