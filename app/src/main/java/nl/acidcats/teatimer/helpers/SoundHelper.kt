@@ -1,12 +1,19 @@
-package nl.acidcats.teatimer.util
+package nl.acidcats.teatimer.helpers
 
 import android.content.Context
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.RingtoneManager
 
-object SoundUtil {
-    fun playSound(context: Context) {
+interface SoundHelper {
+    fun playSound()
+}
+
+class SoundHelperImpl(
+    private val context: Context
+) : SoundHelper {
+
+    override fun playSound() {
         val player = MediaPlayer()
 
         val attributes = AudioAttributes.Builder()

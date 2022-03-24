@@ -1,4 +1,3 @@
-
 buildscript {
     repositories {
         mavenCentral()
@@ -29,7 +28,6 @@ android {
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
 
-        applicationId appConfig.id
         versionCode appConfig.versionCode
         versionName appConfig.versionName
 
@@ -69,7 +67,6 @@ android {
         }
     }
 
-
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -77,13 +74,28 @@ android {
     buildFeatures {
         viewBinding true
     }
+
     lint {
         abortOnError false
         htmlReport true
         warningsAsErrors true
     }
-    namespace 'nl.acidcats.teatimer'
 
+    flavorDimensions "food"
+    productFlavors {
+        tea {
+            dimension "food"
+
+            applicationId 'nl.acidcats.teatimer'
+        }
+        papadum {
+            dimension "food"
+
+            applicationId 'nl.acidcats.papadumtimer'
+        }
+    }
+
+    namespace 'nl.acidcats.teatimer'
 }
 
 dependencies {

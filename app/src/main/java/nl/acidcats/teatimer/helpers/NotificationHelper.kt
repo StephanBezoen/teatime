@@ -1,4 +1,4 @@
-package nl.acidcats.teatimer.util
+package nl.acidcats.teatimer.helpers
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -11,22 +11,47 @@ import android.graphics.Color
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import nl.acidcats.teatimer.R
+import nl.acidcats.teatimer.helpers.NotificationHelper.NotificationId
 
-/**
- * Utilities for notifications
- */
+interface NotificationHelper {
+    enum class NotificationId(val value: Int) {
+        RUNNING(1),
+        DONE(2)
+    }
 
-object NotificationUtil {
+    fun showNotification(
+        id: NotificationId,
+        title: String,
+        message: String,
+        isImportant: Boolean,
+        @StringRes channelIdId: Int,
+        cls: Class<*>
+    )
 
-    fun showNotification(context: Context, id: Int, title: String, message: String, isImportant: Boolean, @StringRes channelIdId: Int, cls: Class<*>) {
-        val notification = createNotification(context, channelIdId, title, message, cls, isImportant)
+    fun cancelNotification(id: NotificationId)
+
+    fun createNotificationChannel(
+        @StringRes channelIdId: Int,
+        @StringRes nameId: Int,
+        @StringRes descId: Int,
+        isImportant: Boolean,
+        enableVibration: Boolean,
+        enableLights: Boolean
+    )
+}
+
+class NotificationHelperImpl(
+    private val context: Context
+) : NotificationHelper {
+
+    override fun showNotification(id: NotificationId, title: String, message: String, isImportant: Boolean, @StringRes channelIdId: Int, cls: Class<*>) {
+        val notification = createNotification(channelIdId, title, message, cls, isImportant)
 
         val manager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        manager.notify(id, notification)
+        manager.notify(id.value, notification)
     }
 
     private fun createNotification(
-        context: Context,
         channelIdId: Int,
         title: String,
         message: String,
@@ -36,7 +61,7 @@ object NotificationUtil {
         val flags = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
 
         val builder = NotificationCompat.Builder(context, context.getString(channelIdId))
-            .setSmallIcon(R.drawable.ic_notification_teacup)
+            .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(title)
             .setContentText(message)
             .setContentIntent(PendingIntent.getActivity(context, 0, Intent(context, cls), flags))
@@ -54,14 +79,13 @@ object NotificationUtil {
         return builder.build()
     }
 
-    fun cancelNotification(context: Context, id: Int) {
+    override fun cancelNotification(id: NotificationId) {
         val manager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
-        manager.cancel(id)
+        manager.cancel(id.value)
     }
 
-    fun createNotificationChannel(
-        context: Context,
+    override fun createNotificationChannel(
         @StringRes channelIdId: Int,
         @StringRes nameId: Int,
         @StringRes descId: Int,

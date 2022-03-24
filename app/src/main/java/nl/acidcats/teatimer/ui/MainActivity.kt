@@ -8,13 +8,13 @@ import android.provider.Settings
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import nl.acidcats.teatimer.R
-import nl.acidcats.teatimer.alarm.AlarmService
 import nl.acidcats.teatimer.databinding.ActivityMainBinding
-import nl.acidcats.teatimer.util.StorageHelper
+import nl.acidcats.teatimer.helpers.StorageHelper
+import nl.acidcats.teatimer.TimerActionReceiver
 import org.koin.android.ext.android.inject
 import java.util.*
 
-class TeaTimeActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
     private val _updateRunnable = ::updateView
     private val _updateHandler = Handler(Looper.getMainLooper())
@@ -28,7 +28,7 @@ class TeaTimeActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.stopButton.setOnClickListener {
-            AlarmService.cancelAlarmService(this)
+            sendBroadcast(TimerActionReceiver.getCancelIntent(this))
 
             _updateHandler.removeCallbacks(_updateRunnable)
 

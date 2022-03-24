@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- TEA -->
+
+    <string name="app_name">TeaTimer</string>
+    <string name="food_name">tea</string>
+
+    <string name="app_shortcut_start_timer">Start (%d min)</string>
+
+</resources>

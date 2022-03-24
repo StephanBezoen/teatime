@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- PAPADUM -->
+
+    <string name="app_name">PapadumTimer</string>
+    <string name="food_name">papadum</string>
+
+    <string name="app_shortcut_start_timer">Start (%d sec)</string>
+</resources>

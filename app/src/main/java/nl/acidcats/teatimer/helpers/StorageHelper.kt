@@ -1,4 +1,4 @@
-package nl.acidcats.teatimer.util
+package nl.acidcats.teatimer.helpers
 
 import android.content.Context
 

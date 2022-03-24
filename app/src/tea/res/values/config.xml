@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- TEA -->
+
+    <integer-array name="app_shortcut_times">
+        <item>1</item>
+        <item>3</item>
+        <item>5</item>
+        <item>10</item>
+    </integer-array>
+    <integer name="default_duration">5</integer>
+    <string name="time_unit">MINUTES</string>
+
+</resources>

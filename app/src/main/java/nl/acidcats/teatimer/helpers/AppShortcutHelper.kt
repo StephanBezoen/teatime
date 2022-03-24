@@ -1,4 +1,4 @@
-package nl.acidcats.teatimer.util
+package nl.acidcats.teatimer.helpers
 
 import android.content.Context
 import android.content.Intent
@@ -7,26 +7,31 @@ import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import nl.acidcats.teatimer.R
 import nl.acidcats.teatimer.ui.SplashActivity
+import nl.acidcats.teatimer.util.IntentKey
+import nl.acidcats.teatimer.util.putExtra
 
-/**
- * Created on 01/02/2018.
- */
+interface AppShortcutHelper {
+    fun setupShortcuts()
+}
 
-object AppShortcutUtil {
-    const val KEY_TIME = "key_time"
+class AppShortcutHelperImpl(
+    private val context: Context,
+    private val configHelper: ConfigHelper
+) : AppShortcutHelper {
 
-    fun setupShortcuts(context: Context) {
+    override fun setupShortcuts() {
         val shortcuts = ArrayList<ShortcutInfo>()
 
-        val timeList = context.getString(R.string.app_shortcut_times).split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        for (timeItem in timeList) {
-            val timeInSec = Integer.parseInt(timeItem)
-
+        for (timeItem in configHelper.shortcutDurations) {
             val shortcutInfo = ShortcutInfo.Builder(context, context.getString(R.string.app_shortcut_id, timeItem))
                 .setShortLabel(context.getString(R.string.app_shortcut_start_timer, timeItem))
                 .setLongLabel(context.getString(R.string.app_shortcut_start_timer, timeItem))
                 .setIcon(Icon.createWithResource(context, R.mipmap.ic_launcher))
-                .setIntent(Intent(context, SplashActivity::class.java).setAction(Intent.ACTION_VIEW).putExtra(KEY_TIME, timeInSec))
+                .setIntent(
+                    Intent(context, SplashActivity::class.java)
+                        .setAction(Intent.ACTION_VIEW)
+                        .putExtra(IntentKey.Duration, timeItem)
+                )
                 .build()
 
             shortcuts.add(shortcutInfo)

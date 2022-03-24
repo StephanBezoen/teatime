@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- PAPADUM -->
+
+    <integer-array name="app_shortcut_times">
+        <item>30</item>
+        <item>40</item>
+        <item>50</item>
+    </integer-array>
+    <integer name="default_duration">40</integer>
+    <string name="time_unit">SECONDS</string>
+
+</resources>

@@ -1,23 +1,22 @@
 <resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" tools:ignore="MissingTranslation">
-    <string name="app_name">TeaTimer</string>
     <string name="stop">stop</string>
     <string name="alarm_stopped">Stopped</string>
-    <string name="time_left"><xliff:g example="8" id="minLength">%2d</xliff:g>:<xliff:g example="8" id="minLength">%2d</xliff:g></string>
-    <string name="tea_done_title">Your tea is done!</string>
-    <string name="tea_done_message">Enjoy your tea :)</string>
+    <string name="time_left"><xliff:g>%2d</xliff:g>:<xliff:g>%2d</xliff:g></string>
     <string name="timer_started_title">Timer started</string>
-    <string name="timer_started_message">Your tea will be done @ %s</string>
     <string name="timer_started">Timer started</string>
     <string name="timer_stopped">Timer stopped</string>
 
-    <string name="notification_channel_name">Regular Notifications</string>
-    <string name="notification_channel_description">This handles the regular tea timer notifications</string>
-    <string name="alarm_channel_name">Alarms</string>
-    <string name="alarm_channel_description">This handles the tea timer alarms</string>
+    <string name="tea_done_title">Your %s is done!</string>
+    <string name="tea_done_message">Enjoy your %s :)</string>
+    <string name="timer_started_message">Your <xliff:g>%s</xliff:g> will be done @ <xliff:g>%s</xliff:g></string>
 
-    <string name="app_shortcut_start_timer">Start (%s min)</string>
+    <string name="notification_channel_name">Regular Notifications</string>
+    <string name="notification_channel_description">Regular timer notifications</string>
+    <string name="alarm_channel_name">Alarms</string>
+    <string name="alarm_channel_description">Timer alarms</string>
+
     <string name="appwidget_text">EXAMPLE</string>
     <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>
-    <string name="app_widget_description">This is an app widget description</string>
+    <string name="app_widget_description">Widget to start the tea timer</string>
 </resources>
